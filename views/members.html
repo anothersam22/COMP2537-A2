@@ -1,0 +1,29 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Members Page</title>
+      <style>
+        body {
+          background-image: url("<%= backgroundImage %>");
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-color: black;
+        }
+        h1 {
+          color: white;
+        }
+        a {
+          color: white;
+        }
+        li {
+          color: white;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Welcome, <%= username %>!</h1>
+
+      <br />
+      <a href="/logout">Logout</a>
+    </body>
+  </html>
