@@ -54,6 +54,18 @@ app.use(
   })
 );
 
+// add isAdmin boolean to every user
+async function addUserType() {
+  const result = await userCollection.updateMany(
+    {},
+    { $set: { isAdmin: false } }
+  );
+  console.log(`${result.modifiedCount} users updated with isAdmin field`);
+}
+addUserType();
+
+
+
 //app.use(express.static(path.join(__dirname, "img")));
 
 app.get("/", (req, res) => {
