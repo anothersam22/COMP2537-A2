@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <style type="text/css">
@@ -17,16 +18,13 @@
         color: white;
       }
     </style>
+    <h1>You are logged out.</h1>
+
+    <br />
   </head>
   <body>
-    <h1>email address:</h1>
-    <form action="/submitEmail" method="post">
-      <input name="email" type="text" placeholder="email" />
-      <button>Submit</button>
-    </form>
-
-    <% if (missingEmail) { %>
+    <a href="/login">login</a>
     <br />
-    email is required <% } %>
+    <a href="/">home</a>
   </body>
 </html>

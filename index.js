@@ -159,7 +159,6 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-
 // // original version of nosql-injection
 // app.get("/nosql-injection", async (req, res) => {
 //   var username = req.query.user;
@@ -208,7 +207,7 @@ app.get("/", (req, res) => {
 
 //   console.log(result);
 //   var html = `
-  
+
 //    <style type="text/css">
 //   body {
 //     background-color: black;
@@ -249,7 +248,6 @@ app.get("/nosql-injection", async (req, res) => {
   res.render("nosql-injection.ejs", { username, error });
 });
 
-
 // // original version of about
 // app.get("/about", (req, res) => {
 //   var color = req.query.color;
@@ -267,7 +265,6 @@ app.get("/about", (req, res) => {
   res.render("about", { color });
 });
 
-
 // // original version of contact
 // app.get("/contact", (req, res) => {
 //   var missingEmail = req.query.missing;
@@ -283,7 +280,7 @@ app.get("/about", (req, res) => {
 //             li { color: white; }
 
 //   </style>
-  
+
 //         <h1>email address:<h1>
 //         <form action='/submitEmail' method='post'>
 //             <input name='email' type='text' placeholder='email'>
@@ -323,8 +320,6 @@ app.post("/submitEmail", (req, res) => {
   }
 });
 
-
-
 // // original version of createUser
 // app.get("/createUser", (req, res) => {
 //   var html = `
@@ -337,7 +332,6 @@ app.post("/submitEmail", (req, res) => {
 //        h1 { color: white; }
 //             a { color: white; }
 //             li { color: white; }
-   
 
 //   </style>
 //     <h1>sign up<h1>
@@ -352,23 +346,25 @@ app.post("/submitEmail", (req, res) => {
 // });
 
 // EJS version of createUser
-app.get('/createUser', (req, res) => {
-  res.render('createUser', {
-    pageTitle: 'Sign Up',
-    pageCSS: 'background-color: black; background-repeat: no-repeat; background-size: cover;',
-    inputName1: 'username',
-    inputName2: 'password',
-    inputName3: 'email',
-    inputType1: 'text',
-    inputType2: 'password',
-    inputType3: 'text',
-    inputPlaceholder1: 'username',
-    inputPlaceholder2: 'password',
-    inputPlaceholder3: 'email',
-    buttonText: 'Submit'})});
+app.get("/createUser", (req, res) => {
+  res.render("createUser", {
+    pageTitle: "Sign Up",
+    pageCSS:
+      "background-color: black; background-repeat: no-repeat; background-size: cover;",
+    inputName1: "username",
+    inputName2: "password",
+    inputName3: "email",
+    inputType1: "text",
+    inputType2: "password",
+    inputType3: "text",
+    inputPlaceholder1: "username",
+    inputPlaceholder2: "password",
+    inputPlaceholder3: "email",
+    buttonText: "Submit",
+  });
+});
 
-
-// // original version of login    
+// // original version of login
 // app.get("/login", (req, res) => {
 //   var html = `
 //   <style type="text/css">
@@ -397,17 +393,66 @@ app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
 
+// // // original version of submitUser
+// app.post("/submitUser", async (req, res) => {
+//   var username = req.body.username;
+//   var password = req.body.password;
+//   // add email
+//   var email = req.body.email;
 
+//   const schema = Joi.object({
+//     username: Joi.string().alphanum().max(20).required(),
+//     password: Joi.string().max(20).required(),
+//     // add email
+//     email: Joi.string().email().required(),
+//   });
+
+//   const validationResult = schema.validate({ username, password, email });
+//   if (validationResult.error != null) {
+//     console.log(validationResult.error);
+//     res.redirect("/createUser");
+//     return;
+//   }
+
+//   var hashedPassword = await bcrypt.hash(password, saltRounds);
+
+//   await userCollection.insertOne({
+//     username: username,
+//     password: hashedPassword,
+//     // add email
+//     email: email,
+//   });
+//   console.log("Inserted user");
+
+//   var html = `
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//   <h1>successfully created user ${username}</h1>;
+//   <br>
+//   <a href='/'>home</a>
+//   <a href='/login'>login</a>
+//   `;
+//   res.send(html);
+// });
+
+// EJS version of submitUser
 app.post("/submitUser", async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
-  // add email
   var email = req.body.email;
 
   const schema = Joi.object({
     username: Joi.string().alphanum().max(20).required(),
     password: Joi.string().max(20).required(),
-    // add email
     email: Joi.string().email().required(),
   });
 
@@ -423,31 +468,22 @@ app.post("/submitUser", async (req, res) => {
   await userCollection.insertOne({
     username: username,
     password: hashedPassword,
-    // add email
     email: email,
   });
   console.log("Inserted user");
 
-  var html = `
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
-
-  </style>
-  <h1>successfully created user ${username}</h1>;
-  <br>
-  <a href='/'>home</a>
-  <a href='/login'>login</a>
-  `;
-  res.send(html);
+  res.render("userCreated", { username: username });
 });
 
+app.get("/createUser", (req, res) => {
+  res.render("createUser");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+// // original version of loggingin
 app.post("/loggingin", async (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
@@ -472,29 +508,31 @@ app.post("/loggingin", async (req, res) => {
   console.log(result);
   if (result.length != 1) {
     console.log("user not found");
-    var html = `
-    <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
+  //   var html = `
+  //   <style type="text/css">
+  // body {
+  //   background-color: black;
+  //   background-repeat: no-repeat;
+  //   background-size: cover;
+  // }
+  //      h1 { color: white; }
+  //           a { color: white; }
+  //           li { color: white; }
 
-  </style>
-    <h1>Invalid username </h1>
-    <br>
-    <a href='/'>home</a>
-    <br>
-    <a href='/login'>Try Again  </a>
-    `;
-    res.send(html);
+  // </style>
+  //   <h1>Invalid username </h1>
+  //   <br>
+  //   <a href='/'>home</a>
+  //   <br>
+  //   <a href='/login'>Try Again  </a>
+  //   `;
+  //   res.send(html);
     //res.redirect("/login");
-
+    res.render("invalidUsername");
     return;
   }
+
+  
   if (await bcrypt.compare(password, result[0].password)) {
     console.log("correct password");
     req.session.authenticated = true;
@@ -505,26 +543,27 @@ app.post("/loggingin", async (req, res) => {
     return;
   } else {
     console.log("incorrect password");
-    var html = `
-    <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
+  //   var html = `
+  //   <style type="text/css">
+  // body {
+  //   background-color: black;
+  //   background-repeat: no-repeat;
+  //   background-size: cover;
+  // }
+  //      h1 { color: white; }
+  //           a { color: white; }
+  //           li { color: white; }
 
-  </style>
-    <h1>Invalid password</h1>
-    <br>
-    <a href='/'>home</a>
-    <br>
-    <a href='/login'>Try Again  </a>
-    `;
-    res.send(html);
+  // </style>
+  //   <h1>Invalid password</h1>
+  //   <br>
+  //   <a href='/'>home</a>
+  //   <br>
+  //   <a href='/login'>Try Again  </a>
+  //   `;
+  //   res.send(html);
     //res.redirect("/login");
+    res.render("invalidPassword");
     return;
   }
 });
@@ -611,29 +650,37 @@ app.get("/members", (req, res) => {
   });
 });
 
+
+// // original version of logout
+// app.get("/logout", (req, res) => {
+//   req.session.destroy();
+//   var html = `
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//     <h1>You are logged out.</h1>
+
+//      <br>
+//     <a href='/login'>login</a> 
+//     <br>
+//     <a href='/'>home</a>
+    
+//     `;
+//   res.send(html);
+// });
+
+// EJS version of logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
-  var html = `
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
-
-  </style>
-    <h1>You are logged out.</h1>
-
-     <br>
-    <a href='/login'>login</a> 
-    <br>
-    <a href='/'>home</a>
-    
-    `;
-  res.send(html);
+  res.render("logout");
 });
 
 app.get("/cat/:id", (req, res) => {
