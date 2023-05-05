@@ -95,48 +95,54 @@ async function deleteAllUsers() {
 
 //app.use(express.static(path.join(__dirname, "img")));
 
+// app.get("/", (req, res) => {
+//   // links to other pages
+//   var html = `
+//   <!DOCTYPE html>
+//   <html>
+//   <head>
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//   </head>
+//   <body>
+
+//     <h1>Members Only</h1>
+//     <br>
+//     <a href='/about'>about</a>
+//     <br>
+//     <a href='/contact'>contact</a>
+//     <br>
+//     <a href='/createUser'>sign up</a>
+//     <br>
+//     <a href='/login'>login</a>
+//     <br>
+//     <a href='/nosql-injection'>nosql-injection</a>
+//     <br>
+//     <a href='/logout'>logout</a>    
+//     <br>
+//     <a href='/members'>members</a>
+//     <br>
+//   </body>
+//   </html>
+
+//     `;
+//   res.send(html);
+// });
+
+// EJS version of the above
 app.get("/", (req, res) => {
-  // links to other pages
-  var html = `
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
-
-  </style>
-  </head>
-  <body>
-
-    <h1>Members Only</h1>
-    <br>
-    <a href='/about'>about</a>
-    <br>
-    <a href='/contact'>contact</a>
-    <br>
-    <a href='/createUser'>sign up</a>
-    <br>
-    <a href='/login'>login</a>
-    <br>
-    <a href='/nosql-injection'>nosql-injection</a>
-    <br>
-    <a href='/logout'>logout</a>    
-    <br>
-    <a href='/members'>members</a>
-    <br>
-  </body>
-  </html>
-
-    `;
-  res.send(html);
+  res.render("index.ejs");
 });
+
 
 app.get("/nosql-injection", async (req, res) => {
   var username = req.query.user;
