@@ -1,0 +1,21 @@
+
+  
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= pageTitle %></title>
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+  <h1><%= pageTitle %></h1>
+  <form action="/submitUser" method="post">
+    <input name="<%= inputName1 %>" type="<%= inputType1 %>" placeholder="<%= inputPlaceholder1 %>">
+    <input name="<%= inputName2 %>" type="<%= inputType2 %>" placeholder="<%= inputPlaceholder2 %>">
+    <input name="<%= inputName3 %>" type="<%= inputType3 %>" placeholder="<%= inputPlaceholder3 %>">
+    <button><%= buttonText %></button>
+  </form>
+</body>
+</html>
+

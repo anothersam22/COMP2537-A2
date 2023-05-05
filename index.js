@@ -303,63 +303,100 @@ app.get("/contact", (req, res) => {
   res.render("contact", { missingEmail });
 });
 
+// // original version of submitEmail
+// app.post("/submitEmail", (req, res) => {
+//   var email = req.body.email;
+//   if (!email) {
+//     res.redirect("/contact?missing=1");
+//   } else {
+//     res.send("Thanks for subscribing with your email: " + email);
+//   }
+// });
 
+// EJS version of submitEmail
 app.post("/submitEmail", (req, res) => {
   var email = req.body.email;
   if (!email) {
     res.redirect("/contact?missing=1");
   } else {
-    res.send("Thanks for subscribing with your email: " + email);
+    res.render("thankyou", { email: email });
   }
 });
 
-app.get("/createUser", (req, res) => {
-  var html = `
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
+
+
+// // original version of createUser
+// app.get("/createUser", (req, res) => {
+//   var html = `
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
    
 
-  </style>
-    <h1>sign up<h1>
-    <form action='/submitUser' method='post'>
-    <input name='username' type='text' placeholder='username'>
-    <input name='password' type='password' placeholder='password'>
-    <input name= 'email' type='text' placeholder='email'>
-    <button>Submit</button>
-    </form>
-    `;
-  res.send(html);
-});
+//   </style>
+//     <h1>sign up<h1>
+//     <form action='/submitUser' method='post'>
+//     <input name='username' type='text' placeholder='username'>
+//     <input name='password' type='password' placeholder='password'>
+//     <input name= 'email' type='text' placeholder='email'>
+//     <button>Submit</button>
+//     </form>
+//     `;
+//   res.send(html);
+// });
 
+// EJS version of createUser
+app.get('/createUser', (req, res) => {
+  res.render('createUser', {
+    pageTitle: 'Sign Up',
+    pageCSS: 'background-color: black; background-repeat: no-repeat; background-size: cover;',
+    inputName1: 'username',
+    inputName2: 'password',
+    inputName3: 'email',
+    inputType1: 'text',
+    inputType2: 'password',
+    inputType3: 'text',
+    inputPlaceholder1: 'username',
+    inputPlaceholder2: 'password',
+    inputPlaceholder3: 'email',
+    buttonText: 'Submit'})});
+
+
+// // original version of login    
+// app.get("/login", (req, res) => {
+//   var html = `
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//     <h1>log in<h1>
+//     <form action='/loggingin' method='post'>
+//     <input name='username' type='text' placeholder='username'>
+//     <input name='password' type='password' placeholder='password'>
+//     <button>Submit</button>
+//     </form>
+//     `;
+//   res.send(html);
+// });
+
+// EJS version of login
 app.get("/login", (req, res) => {
-  var html = `
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
-
-  </style>
-    <h1>log in<h1>
-    <form action='/loggingin' method='post'>
-    <input name='username' type='text' placeholder='username'>
-    <input name='password' type='password' placeholder='password'>
-    <button>Submit</button>
-    </form>
-    `;
-  res.send(html);
+  res.render("login.ejs");
 });
+
 
 app.post("/submitUser", async (req, res) => {
   var username = req.body.username;

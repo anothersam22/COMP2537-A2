@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login Page</title>
+    <title>Submit Email</title>
     <style type="text/css">
       body {
         background-color: black;
@@ -20,11 +20,8 @@
     </style>
   </head>
   <body>
-    <h1>log in</h1>
-    <form action="/loggingin" method="post">
-      <input name="username" type="text" placeholder="username" />
-      <input name="password" type="password" placeholder="password" />
-      <button>Submit</button>
-    </form>
+    <% if (!email) { %> <% res.redirect("/contact?missing=1") %> <% } else { %>
+    <p>Thanks for subscribing with your email: <%= email %></p>
+    <% } %>
   </body>
 </html>
