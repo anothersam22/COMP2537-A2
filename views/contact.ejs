@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        background-color: black;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      h1 {
+        color: white;
+      }
+      a {
+        color: white;
+      }
+      li {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>email address:</h1>
+    <form action="/submitEmail" method="post">
+      <input name="email" type="text" placeholder="email" />
+      <button>Submit</button>
+    </form>
+
+    <% if (missingEmail) { %>
+    <br />
+    email is required <% } %>
+  </body>
+</html>
+
+In the above code, we are using EJS to render the HTML content for the contact
+page. We pass the missingEmail query parameter as a variable to the EJS template
+using the res.render() method. Inside the template, we use EJS syntax to
+conditionally show the error message if missingEmail is truthy.

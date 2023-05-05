@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        background-color: black;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      h1 {
+        color: white;
+      }
+      a {
+        color: white;
+      }
+      li {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <% if (!username) { %>
+    <h3>no user provided - try /nosql-injection?user=name</h3>
+    <h3>or /nosql-injection?user[$ne]=name</h3>
+    <% } else if (error) { %>
+    <h1 style="color: darkred">A NoSQL injection attack was detected!!</h1>
+    <% } else { %>
+    <h1>Hello <%= username %></h1>
+    <% } %>
+  </body>
+</html>

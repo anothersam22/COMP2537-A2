@@ -159,107 +159,150 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+
+// // original version of nosql-injection
+// app.get("/nosql-injection", async (req, res) => {
+//   var username = req.query.user;
+
+//   if (!username) {
+//     res.send(
+//       `
+//        <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h3 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//       <h3>no user provided - try /nosql-injection?user=name</h3> <h3>or /nosql-injection?user[$ne]=name</h3>
+//       `
+//     );
+//     return;
+//   }
+//   console.log("user: " + username);
+
+//   const schema = Joi.string().max(20).required();
+//   const validationResult = schema.validate(username);
+
+//   //If we didn't use Joi to validate and check for a valid URL parameter below
+//   // we could run our userCollection.find and it would be possible to attack.
+//   // A URL parameter of user[$ne]=name would get executed as a MongoDB command
+//   // and may result in revealing information about all users or a successful
+//   // login without knowing the correct password.
+//   if (validationResult.error != null) {
+//     console.log(validationResult.error);
+//     res.send(
+//       "<h1 style='color:darkred;'>A NoSQL injection attack was detected!!</h1>"
+//     );
+//     return;
+//   }
+
+//   const result = await userCollection
+//     .find({ username: username })
+//     .project({ username: 1, password: 1, _id: 1 })
+//     .toArray();
+
+//   console.log(result);
+//   var html = `
+  
+//    <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
+//   <h1>Hello ${username}</h1>
+//   `;
+//   res.send(html);
+//   //res.send(`<h1>Hello ${username}</h1>`);
+// });
+
+// EJS version of nosql-injection
 app.get("/nosql-injection", async (req, res) => {
-  var username = req.query.user;
+  const username = req.query.user;
+  let error = null;
 
   if (!username) {
-    res.send(
-      `
-       <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h3 { color: white; }
-            a { color: white; }
-            li { color: white; }
+    // No user provided, set error message
+    error =
+      "no user provided - try /nosql-injection?user=name or /nosql-injection?user[$ne]=name";
+  } else {
+    // User provided, validate with Joi
+    const schema = Joi.string().max(20).required();
+    const validationResult = schema.validate(username);
 
-  </style>
-      <h3>no user provided - try /nosql-injection?user=name</h3> <h3>or /nosql-injection?user[$ne]=name</h3>
-      `
-    );
-    return;
-  }
-  console.log("user: " + username);
-
-  const schema = Joi.string().max(20).required();
-  const validationResult = schema.validate(username);
-
-  //If we didn't use Joi to validate and check for a valid URL parameter below
-  // we could run our userCollection.find and it would be possible to attack.
-  // A URL parameter of user[$ne]=name would get executed as a MongoDB command
-  // and may result in revealing information about all users or a successful
-  // login without knowing the correct password.
-  if (validationResult.error != null) {
-    console.log(validationResult.error);
-    res.send(
-      "<h1 style='color:darkred;'>A NoSQL injection attack was detected!!</h1>"
-    );
-    return;
+    if (validationResult.error != null) {
+      // Validation failed, set error message
+      error = "A NoSQL injection attack was detected!!";
+    }
   }
 
-  const result = await userCollection
-    .find({ username: username })
-    .project({ username: 1, password: 1, _id: 1 })
-    .toArray();
-
-  console.log(result);
-  var html = `
-  
-   <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
-
-  </style>
-  <h1>Hello ${username}</h1>
-  `;
-  res.send(html);
-  //res.send(`<h1>Hello ${username}</h1>`);
+  res.render("nosql-injection.ejs", { username, error });
 });
 
+
+// // original version of about
+// app.get("/about", (req, res) => {
+//   var color = req.query.color;
+
+//   res.send(
+//     "<h1 style='color:" +
+//       color +
+//       ";'>SAM TAM [SET 2E DTC]  COMP2537: ASSIGNMENT 1 </h1>"
+//   );
+// });
+
+// EJS version of about
 app.get("/about", (req, res) => {
-  var color = req.query.color;
-
-  res.send(
-    "<h1 style='color:" +
-      color +
-      ";'>SAM TAM [SET 2E DTC]  COMP2537: ASSIGNMENT 1 </h1>"
-  );
+  const color = req.query.color || "black";
+  res.render("about", { color });
 });
 
-app.get("/contact", (req, res) => {
-  var missingEmail = req.query.missing;
-  var html = `
-  <style type="text/css">
-  body {
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-       h1 { color: white; }
-            a { color: white; }
-            li { color: white; }
 
-  </style>
+// // original version of contact
+// app.get("/contact", (req, res) => {
+//   var missingEmail = req.query.missing;
+//   var html = `
+//   <style type="text/css">
+//   body {
+//     background-color: black;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+//   }
+//        h1 { color: white; }
+//             a { color: white; }
+//             li { color: white; }
+
+//   </style>
   
-        <h1>email address:<h1>
-        <form action='/submitEmail' method='post'>
-            <input name='email' type='text' placeholder='email'>
-            <button>Submit</button>
-        </form>
-    `;
-  if (missingEmail) {
-    html += "<br> email is required";
-  }
-  res.send(html);
+//         <h1>email address:<h1>
+//         <form action='/submitEmail' method='post'>
+//             <input name='email' type='text' placeholder='email'>
+//             <button>Submit</button>
+//         </form>
+//     `;
+//   if (missingEmail) {
+//     html += "<br> email is required";
+//   }
+//   res.send(html);
+// });
+
+// EJS Contact route
+app.get("/contact", (req, res) => {
+  const missingEmail = req.query.missing;
+
+  res.render("contact", { missingEmail });
 });
+
 
 app.post("/submitEmail", (req, res) => {
   var email = req.body.email;
