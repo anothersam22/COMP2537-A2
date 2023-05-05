@@ -1,4 +1,6 @@
 require("./utils.js");
+const validator = require("validator");
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 const express = require("express");
@@ -64,6 +66,21 @@ async function addUserType() {
 }
 addUserType();
 
+// add images array to every user
+async function addImagesArray() {
+  const result = await userCollection.updateMany({}, { $set: { images: [] } });
+  console.log(`${result.modifiedCount} users updated with images array`);
+}
+addImagesArray();
+
+// function to add an image to a user's images array
+async function addImageToUser(username, image) {
+  const result = await userCollection.updateOne(
+    username.$set({ images: image })
+  );
+  console.log(`${result.modifiedCount} users updated with images array`);
+}
+
 // function to change isAdmin to true for a specific user
 async function promoteUser(username) {
   const result = await userCollection.updateOne(
@@ -91,7 +108,6 @@ async function deleteAllUsers() {
   const result = await userCollection.deleteMany({});
   console.log(`${result.deletedCount} users deleted`);
 }
-
 
 //app.use(express.static(path.join(__dirname, "img")));
 
@@ -127,7 +143,7 @@ async function deleteAllUsers() {
 //     <br>
 //     <a href='/nosql-injection'>nosql-injection</a>
 //     <br>
-//     <a href='/logout'>logout</a>    
+//     <a href='/logout'>logout</a>
 //     <br>
 //     <a href='/members'>members</a>
 //     <br>
@@ -142,7 +158,6 @@ async function deleteAllUsers() {
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
-
 
 app.get("/nosql-injection", async (req, res) => {
   var username = req.query.user;
