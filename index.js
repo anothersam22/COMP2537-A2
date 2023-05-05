@@ -64,6 +64,33 @@ async function addUserType() {
 }
 addUserType();
 
+// function to change isAdmin to true for a specific user
+async function promoteUser(username) {
+  const result = await userCollection.updateOne(
+    username.$set({ isAdmin: true })
+  );
+  console.log(`${result.modifiedCount} users updated with isAdmin field`);
+}
+
+// function to change isAdmin to false for a specific user
+async function demoteUser(username) {
+  const result = await userCollection.updateOne(
+    username.$set({ isAdmin: false })
+  );
+  console.log(`${result.modifiedCount} users updated with isAdmin field`);
+}
+
+// function to delete a user
+async function deleteUser(username) {
+  const result = await userCollection.deleteOne(username);
+  console.log(`${result.deletedCount} users deleted`);
+}
+
+// function to delete all users
+async function deleteAllUsers() {
+  const result = await userCollection.deleteMany({});
+  console.log(`${result.deletedCount} users deleted`);
+}
 
 
 //app.use(express.static(path.join(__dirname, "img")));
