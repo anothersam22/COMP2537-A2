@@ -66,20 +66,6 @@ async function addUserType() {
 }
 addUserType();
 
-// add images array to every user
-async function addImagesArray() {
-  const result = await userCollection.updateMany({}, { $set: { images: [] } });
-  console.log(`${result.modifiedCount} users updated with images array`);
-}
-addImagesArray();
-
-// function to add an image to a user's images array
-async function addImageToUser(username, image) {
-  const result = await userCollection.updateOne(
-    username.$set({ images: image })
-  );
-  console.log(`${result.modifiedCount} users updated with images array`);
-}
 
 // function to change isAdmin to true for a specific user
 async function promoteUser(username) {
