@@ -19,6 +19,8 @@
     </style>
   </head>
   <body>
+           <%- include('partials/header.ejs'); %>
+
     <% if (!username) { %>
     <h3>no user provided - try /nosql-injection?user=name</h3>
     <h3>or /nosql-injection?user[$ne]=name</h3>
@@ -27,5 +29,7 @@
     <% } else { %>
     <h1>Hello <%= username %></h1>
     <% } %>
+         <%- include('partials/footer.ejs'); %>
+
   </body>
 </html>

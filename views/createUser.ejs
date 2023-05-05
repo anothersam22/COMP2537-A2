@@ -9,6 +9,8 @@
   </style>
 </head>
 <body>
+           <%- include('partials/header.ejs'); %>
+
   <h1><%= pageTitle %></h1>
   <form action="/submitUser" method="post">
     <input name="<%= inputName1 %>" type="<%= inputType1 %>" placeholder="<%= inputPlaceholder1 %>">
@@ -16,6 +18,8 @@
     <input name="<%= inputName3 %>" type="<%= inputType3 %>" placeholder="<%= inputPlaceholder3 %>">
     <button><%= buttonText %></button>
   </form>
+       <%- include('partials/footer.ejs'); %>
+
 </body>
 </html>
 

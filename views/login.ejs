@@ -20,11 +20,15 @@
     </style>
   </head>
   <body>
+           <%- include('partials/header.ejs'); %>
+
     <h1>log in</h1>
     <form action="/loggingin" method="post">
       <input name="username" type="text" placeholder="username" />
       <input name="password" type="password" placeholder="password" />
       <button>Submit</button>
     </form>
+         <%- include('partials/footer.ejs'); %>
+
   </body>
 </html>

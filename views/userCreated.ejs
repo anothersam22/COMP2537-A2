@@ -14,8 +14,10 @@
     color: white;
   }
 </style>
+<%- include('partials/header.ejs'); %>
 
 <h1>successfully created user <%= username %></h1>
-<br>
+<br />
 <a href="/">home</a>
 <a href="/login">login</a>
+<%- include('partials/footer.ejs'); %>

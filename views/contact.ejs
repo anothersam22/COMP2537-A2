@@ -19,6 +19,8 @@
     </style>
   </head>
   <body>
+           <%- include('partials/header.ejs'); %>
+
     <h1>email address:</h1>
     <form action="/submitEmail" method="post">
       <input name="email" type="text" placeholder="email" />
@@ -28,5 +30,8 @@
     <% if (missingEmail) { %>
     <br />
     email is required <% } %>
+    
+         <%- include('partials/footer.ejs'); %>
+
   </body>
 </html>

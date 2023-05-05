@@ -20,8 +20,12 @@
     </style>
   </head>
   <body>
+           <%- include('partials/header.ejs'); %>
+
     <% if (!email) { %> <% res.redirect("/contact?missing=1") %> <% } else { %>
     <p>Thanks for subscribing with your email: <%= email %></p>
     <% } %>
+         <%- include('partials/footer.ejs'); %>
+
   </body>
 </html>
