@@ -84,17 +84,22 @@ async function addImageToUser(username, image) {
 // function to change isAdmin to true for a specific user
 async function promoteUser(username) {
   const result = await userCollection.updateOne(
-    username.$set({ isAdmin: true })
+    { username: username }, // filter by username
+    { $set: { isAdmin: true } } // set isAdmin to true
   );
-  console.log(`${result.modifiedCount} users updated with isAdmin field`);
+  console.log(`${result.modifiedCount} user updated with isAdmin field`);
 }
+
+// change user ABC to admin
+promoteUser("abc");
 
 // function to change isAdmin to false for a specific user
 async function demoteUser(username) {
   const result = await userCollection.updateOne(
-    username.$set({ isAdmin: false })
+    { username: username }, // filter by username
+    { $set: { isAdmin: false } } // set isAdmin to false
   );
-  console.log(`${result.modifiedCount} users updated with isAdmin field`);
+  console.log(`${result.modifiedCount} user updated with isAdmin field`);
 }
 
 // function to delete a user
@@ -508,31 +513,30 @@ app.post("/loggingin", async (req, res) => {
   console.log(result);
   if (result.length != 1) {
     console.log("user not found");
-  //   var html = `
-  //   <style type="text/css">
-  // body {
-  //   background-color: black;
-  //   background-repeat: no-repeat;
-  //   background-size: cover;
-  // }
-  //      h1 { color: white; }
-  //           a { color: white; }
-  //           li { color: white; }
+    //   var html = `
+    //   <style type="text/css">
+    // body {
+    //   background-color: black;
+    //   background-repeat: no-repeat;
+    //   background-size: cover;
+    // }
+    //      h1 { color: white; }
+    //           a { color: white; }
+    //           li { color: white; }
 
-  // </style>
-  //   <h1>Invalid username </h1>
-  //   <br>
-  //   <a href='/'>home</a>
-  //   <br>
-  //   <a href='/login'>Try Again  </a>
-  //   `;
-  //   res.send(html);
+    // </style>
+    //   <h1>Invalid username </h1>
+    //   <br>
+    //   <a href='/'>home</a>
+    //   <br>
+    //   <a href='/login'>Try Again  </a>
+    //   `;
+    //   res.send(html);
     //res.redirect("/login");
     res.render("invalidUsername");
     return;
   }
 
-  
   if (await bcrypt.compare(password, result[0].password)) {
     console.log("correct password");
     req.session.authenticated = true;
@@ -543,37 +547,59 @@ app.post("/loggingin", async (req, res) => {
     return;
   } else {
     console.log("incorrect password");
-  //   var html = `
-  //   <style type="text/css">
-  // body {
-  //   background-color: black;
-  //   background-repeat: no-repeat;
-  //   background-size: cover;
-  // }
-  //      h1 { color: white; }
-  //           a { color: white; }
-  //           li { color: white; }
+    //   var html = `
+    //   <style type="text/css">
+    // body {
+    //   background-color: black;
+    //   background-repeat: no-repeat;
+    //   background-size: cover;
+    // }
+    //      h1 { color: white; }
+    //           a { color: white; }
+    //           li { color: white; }
 
-  // </style>
-  //   <h1>Invalid password</h1>
-  //   <br>
-  //   <a href='/'>home</a>
-  //   <br>
-  //   <a href='/login'>Try Again  </a>
-  //   `;
-  //   res.send(html);
+    // </style>
+    //   <h1>Invalid password</h1>
+    //   <br>
+    //   <a href='/'>home</a>
+    //   <br>
+    //   <a href='/login'>Try Again  </a>
+    //   `;
+    //   res.send(html);
     //res.redirect("/login");
     res.render("invalidPassword");
     return;
   }
 });
 
+// change here for if/else admin
 app.get("/loggedin", (req, res) => {
   if (!req.session.authenticated) {
     res.redirect("/login");
   }
-
   res.redirect("/members");
+});
+
+
+// // admin route with EJS that displays all users
+// app.get("/admin", async (req, res) => {
+//   if (!req.session.user || !req.session.user.isAdmin) { // check if user is signed in and is an adm
+//     res.redirect("/login");
+//   } else {
+//     const users = await User.find(); // get all users from the MongoDB collection
+//     res.render("admin", { users }); // render the admin EJS page and pass in the users variable
+//   }
+// });
+
+// admin route with EJS that displays all users
+app.get("/admin", async (req, res) => {
+  console.log(req.session.user.isAdmin);
+  if (req.session.user.isAdmin) {
+    const users = await User.find(); // get all users from the MongoDB collection
+    res.render("admin", { users }); // render the admin EJS page and pass in the users variable
+  } else {
+    res.redirect("/members");
+  }
 });
 
 // // members page original
@@ -626,11 +652,16 @@ app.get("/loggedin", (req, res) => {
 // app.use(express.static(path.join(__dirname, "img"))); <--- this uses the 'ABSOLUTE' path; THAT'S WHY IT DOESN'T WORK
 app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
 
+// members page with EJS
 app.get("/members", (req, res) => {
   if (!req.session.username) {
     res.redirect("/login");
     return;
   }
+  // if (req.session.user.isAdmin) {
+  //   res.render("/admin");
+  //   return;
+  // }
 
   const imgDir = path.join(__dirname, "public/img");
   fs.readdir(imgDir, (err, files) => {
@@ -650,6 +681,21 @@ app.get("/members", (req, res) => {
   });
 });
 
+// promote user route
+app.get("/promote/:id", async (req, res) => {
+  const user = await User.findById(req.params.id); // find the user by ID
+  user.isAdmin = true; // set the isAdmin property to true
+  await user.save(); // save the user
+  res.redirect("/admin"); // redirect to the admin page
+});
+
+// demote user route
+app.get("/demote/:id", async (req, res) => {
+  const user = await User.findById(req.params.id); // find the user by ID
+  user.isAdmin = false; // set the isAdmin property to false
+  await user.save(); // save the user
+  res.redirect("/admin"); // redirect to the admin page
+});
 
 // // original version of logout
 // app.get("/logout", (req, res) => {
@@ -669,10 +715,10 @@ app.get("/members", (req, res) => {
 //     <h1>You are logged out.</h1>
 
 //      <br>
-//     <a href='/login'>login</a> 
+//     <a href='/login'>login</a>
 //     <br>
 //     <a href='/'>home</a>
-    
+
 //     `;
 //   res.send(html);
 // });
