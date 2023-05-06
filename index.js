@@ -56,16 +56,15 @@ app.use(
   })
 );
 
-// add isAdmin boolean to every user
-async function addUserType() {
-  const result = await userCollection.updateMany(
-    {},
-    { $set: { isAdmin: false } }
-  );
-  console.log(`${result.modifiedCount} users updated with isAdmin field`);
-}
-addUserType();
-
+// // add isAdmin boolean to every user
+// async function addUserType() {
+//   const result = await userCollection.updateMany(
+//     {},
+//     { $set: { isAdmin: false } }
+//   );
+//   console.log(`${result.modifiedCount} users updated with isAdmin field`);
+// }
+// addUserType();
 
 // function to change isAdmin to true for a specific user
 async function promoteUser(username) {
@@ -76,8 +75,11 @@ async function promoteUser(username) {
   console.log(`${result.modifiedCount} user updated with isAdmin field`);
 }
 
-// change user ABC to admin
-promoteUser("abc");
+
+// // change user ABC to admin
+// promoteUser("abc");
+
+
 
 // function to change isAdmin to false for a specific user
 async function demoteUser(username) {
@@ -100,121 +102,10 @@ async function deleteAllUsers() {
   console.log(`${result.deletedCount} users deleted`);
 }
 
-//app.use(express.static(path.join(__dirname, "img")));
-
-// app.get("/", (req, res) => {
-//   // links to other pages
-//   var html = `
-//   <!DOCTYPE html>
-//   <html>
-//   <head>
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//   </head>
-//   <body>
-
-//     <h1>Members Only</h1>
-//     <br>
-//     <a href='/about'>about</a>
-//     <br>
-//     <a href='/contact'>contact</a>
-//     <br>
-//     <a href='/createUser'>sign up</a>
-//     <br>
-//     <a href='/login'>login</a>
-//     <br>
-//     <a href='/nosql-injection'>nosql-injection</a>
-//     <br>
-//     <a href='/logout'>logout</a>
-//     <br>
-//     <a href='/members'>members</a>
-//     <br>
-//   </body>
-//   </html>
-
-//     `;
-//   res.send(html);
-// });
-
-// EJS version of the above
+// EJS for home page
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
-
-// // original version of nosql-injection
-// app.get("/nosql-injection", async (req, res) => {
-//   var username = req.query.user;
-
-//   if (!username) {
-//     res.send(
-//       `
-//        <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h3 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//       <h3>no user provided - try /nosql-injection?user=name</h3> <h3>or /nosql-injection?user[$ne]=name</h3>
-//       `
-//     );
-//     return;
-//   }
-//   console.log("user: " + username);
-
-//   const schema = Joi.string().max(20).required();
-//   const validationResult = schema.validate(username);
-
-//   //If we didn't use Joi to validate and check for a valid URL parameter below
-//   // we could run our userCollection.find and it would be possible to attack.
-//   // A URL parameter of user[$ne]=name would get executed as a MongoDB command
-//   // and may result in revealing information about all users or a successful
-//   // login without knowing the correct password.
-//   if (validationResult.error != null) {
-//     console.log(validationResult.error);
-//     res.send(
-//       "<h1 style='color:darkred;'>A NoSQL injection attack was detected!!</h1>"
-//     );
-//     return;
-//   }
-
-//   const result = await userCollection
-//     .find({ username: username })
-//     .project({ username: 1, password: 1, _id: 1 })
-//     .toArray();
-
-//   console.log(result);
-//   var html = `
-
-//    <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//   <h1>Hello ${username}</h1>
-//   `;
-//   res.send(html);
-//   //res.send(`<h1>Hello ${username}</h1>`);
-// });
 
 // EJS version of nosql-injection
 app.get("/nosql-injection", async (req, res) => {
@@ -239,50 +130,11 @@ app.get("/nosql-injection", async (req, res) => {
   res.render("nosql-injection.ejs", { username, error });
 });
 
-// // original version of about
-// app.get("/about", (req, res) => {
-//   var color = req.query.color;
-
-//   res.send(
-//     "<h1 style='color:" +
-//       color +
-//       ";'>SAM TAM [SET 2E DTC]  COMP2537: ASSIGNMENT 1 </h1>"
-//   );
-// });
-
 // EJS version of about
 app.get("/about", (req, res) => {
   const color = req.query.color || "black";
   res.render("about", { color });
 });
-
-// // original version of contact
-// app.get("/contact", (req, res) => {
-//   var missingEmail = req.query.missing;
-//   var html = `
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-
-//         <h1>email address:<h1>
-//         <form action='/submitEmail' method='post'>
-//             <input name='email' type='text' placeholder='email'>
-//             <button>Submit</button>
-//         </form>
-//     `;
-//   if (missingEmail) {
-//     html += "<br> email is required";
-//   }
-//   res.send(html);
-// });
 
 // EJS Contact route
 app.get("/contact", (req, res) => {
@@ -290,16 +142,6 @@ app.get("/contact", (req, res) => {
 
   res.render("contact", { missingEmail });
 });
-
-// // original version of submitEmail
-// app.post("/submitEmail", (req, res) => {
-//   var email = req.body.email;
-//   if (!email) {
-//     res.redirect("/contact?missing=1");
-//   } else {
-//     res.send("Thanks for subscribing with your email: " + email);
-//   }
-// });
 
 // EJS version of submitEmail
 app.post("/submitEmail", (req, res) => {
@@ -310,31 +152,6 @@ app.post("/submitEmail", (req, res) => {
     res.render("thankyou", { email: email });
   }
 });
-
-// // original version of createUser
-// app.get("/createUser", (req, res) => {
-//   var html = `
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//     <h1>sign up<h1>
-//     <form action='/submitUser' method='post'>
-//     <input name='username' type='text' placeholder='username'>
-//     <input name='password' type='password' placeholder='password'>
-//     <input name= 'email' type='text' placeholder='email'>
-//     <button>Submit</button>
-//     </form>
-//     `;
-//   res.send(html);
-// });
 
 // EJS version of createUser
 app.get("/createUser", (req, res) => {
@@ -355,85 +172,10 @@ app.get("/createUser", (req, res) => {
   });
 });
 
-// // original version of login
-// app.get("/login", (req, res) => {
-//   var html = `
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//     <h1>log in<h1>
-//     <form action='/loggingin' method='post'>
-//     <input name='username' type='text' placeholder='username'>
-//     <input name='password' type='password' placeholder='password'>
-//     <button>Submit</button>
-//     </form>
-//     `;
-//   res.send(html);
-// });
-
 // EJS version of login
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
-
-// // // original version of submitUser
-// app.post("/submitUser", async (req, res) => {
-//   var username = req.body.username;
-//   var password = req.body.password;
-//   // add email
-//   var email = req.body.email;
-
-//   const schema = Joi.object({
-//     username: Joi.string().alphanum().max(20).required(),
-//     password: Joi.string().max(20).required(),
-//     // add email
-//     email: Joi.string().email().required(),
-//   });
-
-//   const validationResult = schema.validate({ username, password, email });
-//   if (validationResult.error != null) {
-//     console.log(validationResult.error);
-//     res.redirect("/createUser");
-//     return;
-//   }
-
-//   var hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//   await userCollection.insertOne({
-//     username: username,
-//     password: hashedPassword,
-//     // add email
-//     email: email,
-//   });
-//   console.log("Inserted user");
-
-//   var html = `
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//   <h1>successfully created user ${username}</h1>;
-//   <br>
-//   <a href='/'>home</a>
-//   <a href='/login'>login</a>
-//   `;
-//   res.send(html);
-// });
 
 // EJS version of submitUser
 app.post("/submitUser", async (req, res) => {
@@ -460,6 +202,8 @@ app.post("/submitUser", async (req, res) => {
     username: username,
     password: hashedPassword,
     email: email,
+    isAdmin: false,
+
   });
   console.log("Inserted user");
 
@@ -499,26 +243,6 @@ app.post("/loggingin", async (req, res) => {
   console.log(result);
   if (result.length != 1) {
     console.log("user not found");
-    //   var html = `
-    //   <style type="text/css">
-    // body {
-    //   background-color: black;
-    //   background-repeat: no-repeat;
-    //   background-size: cover;
-    // }
-    //      h1 { color: white; }
-    //           a { color: white; }
-    //           li { color: white; }
-
-    // </style>
-    //   <h1>Invalid username </h1>
-    //   <br>
-    //   <a href='/'>home</a>
-    //   <br>
-    //   <a href='/login'>Try Again  </a>
-    //   `;
-    //   res.send(html);
-    //res.redirect("/login");
     res.render("invalidUsername");
     return;
   }
@@ -533,41 +257,69 @@ app.post("/loggingin", async (req, res) => {
     return;
   } else {
     console.log("incorrect password");
-    //   var html = `
-    //   <style type="text/css">
-    // body {
-    //   background-color: black;
-    //   background-repeat: no-repeat;
-    //   background-size: cover;
-    // }
-    //      h1 { color: white; }
-    //           a { color: white; }
-    //           li { color: white; }
-
-    // </style>
-    //   <h1>Invalid password</h1>
-    //   <br>
-    //   <a href='/'>home</a>
-    //   <br>
-    //   <a href='/login'>Try Again  </a>
-    //   `;
-    //   res.send(html);
-    //res.redirect("/login");
     res.render("invalidPassword");
     return;
   }
+
+
 });
 
-// change here for if/else admin
-app.get("/loggedin", (req, res) => {
+// // ORIGINAL VERSION OF LOGGEDIN
+// app.get("/loggedIn", (req, res) => {
+//   if (!req.session.authenticated) {
+//     res.redirect("/login");
+//   }
+//   res.redirect("/admin");
+// });
+
+// promote user 'abc' to admin
+
+
+
+// // TEST NEW VERSION OF LOGGEDIN works WITH MEMBERS but not ADMIN test
+// app.get("/loggedIn", (req, res) => {
+//   if (!req.session.authenticated) {
+//     res.redirect("/login");
+//   } else if (req.session.user && req.session.user.isAdmin) {
+//     res.redirect("/admin");
+//   } else {
+//     res.redirect("/members");
+//   }
+// });
+
+// // print abc admin status
+
+
+// TEST NEW VERSION OF LOGGEDIN
+app.get("/loggedIn", async (req, res) => {
   if (!req.session.authenticated) {
     res.redirect("/login");
+    return;
   }
-  res.redirect("/members");
+  var username = req.session.username;
+  const user = await userCollection.findOne({ username: username });
+
+  try {
+    //const user = await userCollection.findOne({ username: "abc" });
+
+    if (user) {
+      console.log(`isAdmin status for user 'abc': ${user.isAdmin}`);
+    } else {
+      console.log("User not found");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  if (user.isAdmin) {
+    res.redirect("/admin");
+  } else {
+    res.redirect("/members");
+  }
 });
 
 
-// // admin route with EJS that displays all users
+// // admin route with EJS that displays all users V1
 // app.get("/admin", async (req, res) => {
 //   if (!req.session.user || !req.session.user.isAdmin) { // check if user is signed in and is an adm
 //     res.redirect("/login");
@@ -577,62 +329,28 @@ app.get("/loggedin", (req, res) => {
 //   }
 // });
 
-// admin route with EJS that displays all users
+// // admin route with EJS that displays all users V2
+// app.get("/admin", async (req, res) => {
+//   console.log(req.session.user.isAdmin);
+//   if (req.session.user.isAdmin) {
+//     const users = await User.find(); // get all users from the MongoDB collection
+//     res.render("admin", { users }); // render the admin EJS page and pass in the users variable
+//   } else {
+//     res.redirect("/members");
+//   }
+// });
+
+
+// ADMIN route with EJS that displays all users V3
 app.get("/admin", async (req, res) => {
-  console.log(req.session.user.isAdmin);
-  if (req.session.user.isAdmin) {
-    const users = await User.find(); // get all users from the MongoDB collection
-    res.render("admin", { users }); // render the admin EJS page and pass in the users variable
-  } else {
-    res.redirect("/members");
-  }
+  // if (!req.session.user || !req.session.user.isAdmin) {
+  //   res.redirect("/login");
+  // }
+  // get all users from the MongoDB collection and put into an array
+  const users = await userCollection.find().toArray();
+  res.render("admin", { users }); // render the admin EJS page and pass in the users variable
 });
 
-// // members page original
-// app.use(express.static(path.join(__dirname, "img")));
-// app.get("/members", (req, res) => {
-//   if (!req.session.username) {
-//     res.redirect("/login");
-//     return;
-//   }
-
-//   const imgDir = path.join(__dirname, "img");
-//   fs.readdir(imgDir, (err, files) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).send("Server error");
-//       return;
-//     }
-
-//     const randomIndex = Math.floor(Math.random() * files.length);
-//     const randomFile = files[randomIndex];
-
-//     res.send(`
-//       <html>
-//         <head>
-//           <title>Members Page</title>
-//           <style>
-//             body { background-image: url("/${randomFile}");
-//                     background-repeat: no-repeat;
-//                     background-size: cover;
-//                     background-color: black;
-//              }
-//             h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//           </style>
-//         </head>
-//         <body>
-//           <h1>Welcome, ${req.session.username}!</h1>
-
-//           <br />
-//           <a href="/logout">Logout</a>
-//         </body>
-//       </html>
-//     `);
-//   });
-// });
 
 // members page with EJS
 // app.use(express.static(path.join(__dirname, "img"))); <--- this uses the 'ABSOLUTE' path; THAT'S WHY IT DOESN'T WORK
@@ -683,32 +401,6 @@ app.get("/demote/:id", async (req, res) => {
   res.redirect("/admin"); // redirect to the admin page
 });
 
-// // original version of logout
-// app.get("/logout", (req, res) => {
-//   req.session.destroy();
-//   var html = `
-//   <style type="text/css">
-//   body {
-//     background-color: black;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//   }
-//        h1 { color: white; }
-//             a { color: white; }
-//             li { color: white; }
-
-//   </style>
-//     <h1>You are logged out.</h1>
-
-//      <br>
-//     <a href='/login'>login</a>
-//     <br>
-//     <a href='/'>home</a>
-
-//     `;
-//   res.send(html);
-// });
-
 // EJS version of logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
@@ -738,6 +430,10 @@ app.get("*", (req, res) => {
   res.status(404);
   res.send("MY 404 Page not found - 404");
 });
+
+
+// // change user ABC to admin
+// promoteUser("abc");
 
 app.listen(port, () => {
   console.log("Node application listening on port " + port);
