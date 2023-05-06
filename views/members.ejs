@@ -9,7 +9,7 @@
           background-size: cover;
           background-color: black;
         }
-        h1 {
+        h1, h5 {
           color: white;
         }
         a {
@@ -22,10 +22,13 @@
     </head>
     <body>
        <%- include('partials/header.ejs'); %>
-      <h1>Welcome, <%= username %>!</h1>
+       <%- include('partials/navbar.ejs'); %>
+
+      <h5>Welcome, <%= username %>!</h5>
 
       <br />
       <a href="/logout">Logout</a>
+           <%- include('partials/footer.ejs'); %>
+
     </body>
-     <%- include('partials/footer.ejs'); %>
   </html>
