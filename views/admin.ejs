@@ -2,62 +2,71 @@
 <html>
   <head>
     <title>Admin Page</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <style>
-    table {
-      border-collapse: separate;
-      border-spacing: 10px; /* Add desired spacing value */
-    }
-    
-    th,
-    td {
-      padding: 10px; /* Add desired padding value */
-    }
-  </style>
-    
+      table {
+        border-collapse: separate;
+        border-spacing: 10px; /* Add desired spacing value */
+      }
+
+      th,
+      td {
+        padding: 10px; /* Add desired padding value */
+      }
+    </style>
   </head>
   <body>
-    <%- include('partials/header.ejs'); %>
-    <%- include('partials/navbar.ejs'); %>
-    <h1>Users</h1>
+    <%- include('partials/header.ejs'); %> <%- include('partials/navbar.ejs');
+    %>
+    <h3> users:</h3>
     <table>
       <thead>
         <tr>
           <th>Name</th>
           <th>Email</th>
           <th>Admin Status</th>
-      
+
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        
         <% users.forEach(function(user) { %>
         <tr>
           <td><%= user.username %></td>
           <td><%= user.email %></td>
           <td><%= user.isAdmin %></td>
-         
+
           <td>
             <% if (user.isAdmin) { %>
             <form action="/demoteUser" method="POST">
               <input type="hidden" name="userId" value="<%= user._id %>" />
-              <input type="hidden" name="username" value="<%= user.username %>" />
-              <button type="submit">Demote</button>
+              <input
+                type="hidden"
+                name="username"
+                value="<%= user.username %>"
+              />
+
+              <button type="submit" class="btn btn-danger">Demote</button>
             </form>
             <% } else { %>
             <form action="/promoteUser" method="POST">
               <input type="hidden" name="userId" value="<%= user._id %>" />
-              <input type="hidden" name="username" value="<%= user.username %>" />
-              <button type="submit">Promote</button>
+              <input
+                type="hidden"
+                name="username"
+                value="<%= user.username %>"
+              />
+              <button type="submit" class="btn btn-success">Promote</button>
             </form>
             <% } %>
           </td>
         </tr>
         <% }); %>
       </tbody>
-
     </table>
-         <%- include('partials/footer.ejs'); %>
-
+    <%- include('partials/footer.ejs'); %>
   </body>
 </html>
