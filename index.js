@@ -289,6 +289,10 @@ app.get("/loggedIn", async (req, res) => {
 
 // ADMIN route with EJS that displays all users V3
 app.get("/admin", async (req, res) => {
+  if (!req.session.authenticated) {
+    res.redirect("/login");
+    return;
+  }
   var username = req.session.username;
   const user = await userCollection.findOne({ username: username });
   if (!user.isAdmin) {
