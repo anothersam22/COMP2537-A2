@@ -75,11 +75,8 @@ async function promoteUser(username) {
   console.log(`${result.modifiedCount} user updated with isAdmin field`);
 }
 
-
 // // change user ABC to admin
 // promoteUser("abc");
-
-
 
 // function to change isAdmin to false for a specific user
 async function demoteUser(username) {
@@ -203,7 +200,6 @@ app.post("/submitUser", async (req, res) => {
     password: hashedPassword,
     email: email,
     isAdmin: false,
-
   });
   console.log("Inserted user");
 
@@ -260,35 +256,7 @@ app.post("/loggingin", async (req, res) => {
     res.render("invalidPassword");
     return;
   }
-
-
 });
-
-// // ORIGINAL VERSION OF LOGGEDIN
-// app.get("/loggedIn", (req, res) => {
-//   if (!req.session.authenticated) {
-//     res.redirect("/login");
-//   }
-//   res.redirect("/admin");
-// });
-
-// promote user 'abc' to admin
-
-
-
-// // TEST NEW VERSION OF LOGGEDIN works WITH MEMBERS but not ADMIN test
-// app.get("/loggedIn", (req, res) => {
-//   if (!req.session.authenticated) {
-//     res.redirect("/login");
-//   } else if (req.session.user && req.session.user.isAdmin) {
-//     res.redirect("/admin");
-//   } else {
-//     res.redirect("/members");
-//   }
-// });
-
-// // print abc admin status
-
 
 // TEST NEW VERSION OF LOGGEDIN
 app.get("/loggedIn", async (req, res) => {
@@ -318,39 +286,11 @@ app.get("/loggedIn", async (req, res) => {
   }
 });
 
-
-// // admin route with EJS that displays all users V1
-// app.get("/admin", async (req, res) => {
-//   if (!req.session.user || !req.session.user.isAdmin) { // check if user is signed in and is an adm
-//     res.redirect("/login");
-//   } else {
-//     const users = await User.find(); // get all users from the MongoDB collection
-//     res.render("admin", { users }); // render the admin EJS page and pass in the users variable
-//   }
-// });
-
-// // admin route with EJS that displays all users V2
-// app.get("/admin", async (req, res) => {
-//   console.log(req.session.user.isAdmin);
-//   if (req.session.user.isAdmin) {
-//     const users = await User.find(); // get all users from the MongoDB collection
-//     res.render("admin", { users }); // render the admin EJS page and pass in the users variable
-//   } else {
-//     res.redirect("/members");
-//   }
-// });
-
-
 // ADMIN route with EJS that displays all users V3
 app.get("/admin", async (req, res) => {
-  // if (!req.session.user || !req.session.user.isAdmin) {
-  //   res.redirect("/login");
-  // }
-  // get all users from the MongoDB collection and put into an array
   const users = await userCollection.find().toArray();
   res.render("admin", { users }); // render the admin EJS page and pass in the users variable
 });
-
 
 // members page with EJS
 // app.use(express.static(path.join(__dirname, "img"))); <--- this uses the 'ABSOLUTE' path; THAT'S WHY IT DOESN'T WORK
@@ -362,10 +302,6 @@ app.get("/members", (req, res) => {
     res.redirect("/login");
     return;
   }
-  // if (req.session.user.isAdmin) {
-  //   res.render("/admin");
-  //   return;
-  // }
 
   const imgDir = path.join(__dirname, "public/img");
   fs.readdir(imgDir, (err, files) => {
@@ -385,19 +321,17 @@ app.get("/members", (req, res) => {
   });
 });
 
-// promote user route
-app.get("/promote/:id", async (req, res) => {
-  const user = await User.findById(req.params.id); // find the user by ID
-  user.isAdmin = true; // set the isAdmin property to true
-  await user.save(); // save the user
+// promoteUser route working
+app.post("/promoteUser", async (req, res) => {
+  var username = req.body.username;
+  await promoteUser(username);
   res.redirect("/admin"); // redirect to the admin page
 });
 
 // demote user route
-app.get("/demote/:id", async (req, res) => {
-  const user = await User.findById(req.params.id); // find the user by ID
-  user.isAdmin = false; // set the isAdmin property to false
-  await user.save(); // save the user
+app.post("/demoteUser", async (req, res) => {
+  var username = req.body.username;
+  await demoteUser(username);
   res.redirect("/admin"); // redirect to the admin page
 });
 
@@ -430,7 +364,6 @@ app.get("*", (req, res) => {
   res.status(404);
   res.send("MY 404 Page not found - 404");
 });
-
 
 // // change user ABC to admin
 // promoteUser("abc");

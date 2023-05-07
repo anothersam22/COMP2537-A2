@@ -4,14 +4,15 @@
     <title>Admin Page</title>
   </head>
   <body>
-                   <%- include('partials/header.ejs'); %>
-
+    <%- include('partials/header.ejs'); %>
+    <%- include('partials/navbar.ejs'); %>
     <h1>Users</h1>
     <table>
       <thead>
         <tr>
           <th>Name</th>
           <th>Email</th>
+          <th>Admin Status</th>
       
           <th>Actions</th>
         </tr>
@@ -22,16 +23,19 @@
         <tr>
           <td><%= user.username %></td>
           <td><%= user.email %></td>
+          <td><%= user.isAdmin %></td>
          
           <td>
             <% if (user.isAdmin) { %>
             <form action="/demoteUser" method="POST">
               <input type="hidden" name="userId" value="<%= user._id %>" />
+              <input type="hidden" name="username" value="<%= user.username %>" />
               <button type="submit">Demote</button>
             </form>
             <% } else { %>
             <form action="/promoteUser" method="POST">
               <input type="hidden" name="userId" value="<%= user._id %>" />
+              <input type="hidden" name="username" value="<%= user.username %>" />
               <button type="submit">Promote</button>
             </form>
             <% } %>
