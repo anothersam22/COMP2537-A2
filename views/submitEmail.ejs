@@ -21,6 +21,8 @@
   </head>
   <body>
            <%- include('partials/header.ejs'); %>
+                             <%- include('partials/navbar.ejs'); %>
+  <br />
 
     <% if (!email) { %> <% res.redirect("/contact?missing=1") %> <% } else { %>
     <p>Thanks for subscribing with your email: <%= email %></p>
