@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Members</title>
-  <style>
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      grid-gap: 10px;
-    }
+  <head>
+    <title>Members</title>
+    <style>
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 10px;
+      }
 
-    .image-grid img {
-      width: 100%;
-      height: auto;
-    }
-  </style>
-</head>
-<body>
-      <%- include('partials/header.ejs'); %> <%- include('partials/navbar.ejs');
+      .image-grid img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/header.ejs'); %> <%- include('partials/navbar.ejs');
     %>
-  <h1>Welcome, <%= username %>!</h1>
+    <h5>Welcome, <%= username %>!</h5>
 
-  <div class="image-grid">
-    <% for (let i = 0; i < images.length; i++) { %>
-      <img src="<%= images[i] %>">
-    <% } %>
-  </div>
-      <%- include('partials/footer.ejs'); %>
-
-</body>
+    <div class="image-grid">
+      <% for (let i = 0; i < images.length; i++) { %>
+      <img src="<%= images[i] %>" />
+      <% } %>
+    </div>
+    <%- include('partials/footer.ejs'); %>
+  </body>
 </html>
+
+<!-- 
+Navigate to this folder and run the following command:
+rm -rf .DS_Store
+This will remove the .DS_Store file from the folder.  -->

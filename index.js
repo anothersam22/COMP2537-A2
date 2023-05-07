@@ -75,8 +75,8 @@ async function promoteUser(username) {
   console.log(`${result.modifiedCount} user updated with isAdmin field`);
 }
 
-// // change user ABC to admin
-// promoteUser("abc");
+// change user X to admin
+promoteUser("admin");
 
 // function to change isAdmin to false for a specific user
 async function demoteUser(username) {
