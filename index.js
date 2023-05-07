@@ -366,35 +366,35 @@ function getRandomFiles(files, count) {
 
 
 
-// // async func to put image into /public/memberImages folder
-// async function uploadImage(image, userID) {
-//   await userCollection.updateOne({ _id: userID }, { $push: { images: image } });
-//   console.log("Image added to user");
-// }
+// async func to put image into /public/memberImages folder
+async function uploadImage(image, userID) {
+  await userCollection.updateOne({ _id: userID }, { $push: { images: image } });
+  console.log("Image added to user");
+}
 
-// // membersUpload page with EJS
-// app.get("/membersUpload", (req, res) => {
-//   if (!req.session.username) {
-//     res.redirect("/login");
-//     return;
-//   }
-//   res.render("membersUpload", {
-//     username: req.session.username,
-//     userID: req.session._id,
-//   });
-// });
+// membersUpload page with EJS
+app.get("/membersUpload", (req, res) => {
+  if (!req.session.username) {
+    res.redirect("/login");
+    return;
+  }
+  res.render("membersUpload", {
+    username: req.session.username,
+    userID: req.session._id,
+  });
+});
 
-// // members upload page with EJS
-// app.post("/upload", async (req, res) => {
-//   if (!req.session.username) {
-//     res.redirect("/login");
-//     return;
-//   }
-//   var userID = req.session._id;
-//   var image = req.body.image;
-//   await uploadImage(image, userID);
-//   res.redirect("/members");
-// });
+// members upload page with EJS
+app.post("/upload", async (req, res) => {
+  if (!req.session.username) {
+    res.redirect("/login");
+    return;
+  }
+  var userID = req.session._id;
+  var image = req.body.image;
+  await uploadImage(image, userID);
+  res.redirect("/members");
+});
 
 // promoteUser route working
 app.post("/promoteUser", async (req, res) => {
