@@ -272,7 +272,7 @@ app.get("/loggedIn", async (req, res) => {
     //const user = await userCollection.findOne({ username: "abc" });
 
     if (user) {
-      console.log(`isAdmin status for user 'abc': ${user.isAdmin}`);
+      console.log(`isAdmin status for user is: ${user.isAdmin}`);
     } else {
       console.log("User not found");
     }
