@@ -300,38 +300,6 @@ app.get("/admin", async (req, res) => {
   res.render("admin", { users }); // render the admin EJS page and pass in the users variable
 });
 
-// members page with EJS
-// app.use(express.static(path.join(__dirname, "img"))); <--- this uses the 'ABSOLUTE' path; THAT'S WHY IT DOESN'T WORK
-// app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
-
-// // members page with EJS  ORIGINAL WITH BACKGROUND IMAGES
-// app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
-
-// app.get("/members", (req, res) => {
-//   if (!req.session.username) {
-//     res.redirect("/login");
-//     return;
-//   }
-
-//   const imgDir = path.join(__dirname, "public/img");
-//   fs.readdir(imgDir, (err, files) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).send("Server error");
-//       return;
-//     }
-
-//     const randomIndex = Math.floor(Math.random() * files.length);
-//     const randomFile = files[randomIndex];
-
-//     res.render("members", {
-//       username: req.session.username,
-//       backgroundImage: `/img/${randomFile}`,
-//       // userID: req.session._id,
-//     });
-//   });
-// });
-
 // members page with EJS NEW VERSION WITH 3 IMAGES
 app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
 app.get("/members", (req, res) => {
@@ -363,8 +331,6 @@ function getRandomFiles(files, count) {
   const shuffled = files.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
-
-
 
 // async func to put image into /public/memberImages folder
 async function uploadImage(image, userID) {
@@ -427,7 +393,6 @@ app.get("/cat/:id", (req, res) => {
     res.send("Invalid cat id: " + cat);
   }
 });
-
 
 app.use(express.static(__dirname + "/public"));
 
