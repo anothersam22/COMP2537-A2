@@ -304,9 +304,11 @@ app.get("/admin", async (req, res) => {
   }
   // if logged in but not admin, redirect to 403 page
   var username = req.session.username;
+  
   const user = await userCollection.findOne({ username: username });
+  const currentPage = "403";
   if (!user.isAdmin) {
-    res.render("403");
+    res.render("403", {currentPage});
     return;
   }
   // if logged in and admin, display all users
@@ -414,7 +416,8 @@ app.get("/cat/:id", (req, res) => {
 app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
-  res.render("404");
+  const currentPage = "*";
+  res.render("404", {currentPage});
 });
 
 // // change user ABC to admin
