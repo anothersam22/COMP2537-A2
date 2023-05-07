@@ -289,17 +289,19 @@ app.get("/loggedIn", async (req, res) => {
 
 // ADMIN route with EJS that displays all users V3
 app.get("/admin", async (req, res) => {
+  // if not logged in, redirect to login page
   if (!req.session.authenticated) {
     res.redirect("/login");
     return;
   }
+  // if logged in but not admin, redirect to 403 page
   var username = req.session.username;
   const user = await userCollection.findOne({ username: username });
   if (!user.isAdmin) {
     res.render("403");
     return;
   }
-
+  // if logged in and admin, display all users
   const users = await userCollection.find().toArray();
   res.render("admin", { users }); // render the admin EJS page and pass in the users variable
 });
