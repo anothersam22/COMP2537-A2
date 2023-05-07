@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Members Page</title>
+    <style>
+  
+    </style>
+  </head>
+  <body>
+    <%- include('partials/header.ejs'); %> <%- include('partials/navbar.ejs');
+    %>
+
+    <h5>Welcome, <%= username %>!</h5>
+
+    
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" />
+      <input type="hidden" name="userID" value="<%= userID %>" />
+      <input type="submit" value="Upload" />
+    </form>
+
+    <br />
+    <a href="/logout">Logout</a>
+    <%- include('partials/footer.ejs'); %>
+  </body>
+</html>

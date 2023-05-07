@@ -200,6 +200,7 @@ app.post("/submitUser", async (req, res) => {
     password: hashedPassword,
     email: email,
     isAdmin: false,
+    images: [],
   });
   console.log("Inserted user");
 
@@ -288,15 +289,51 @@ app.get("/loggedIn", async (req, res) => {
 
 // ADMIN route with EJS that displays all users V3
 app.get("/admin", async (req, res) => {
+  var username = req.session.username;
+  const user = await userCollection.findOne({ username: username });
+  if (!user.isAdmin) {
+    res.render("403");
+    return;
+  }
+
   const users = await userCollection.find().toArray();
   res.render("admin", { users }); // render the admin EJS page and pass in the users variable
 });
 
 // members page with EJS
 // app.use(express.static(path.join(__dirname, "img"))); <--- this uses the 'ABSOLUTE' path; THAT'S WHY IT DOESN'T WORK
-app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
+// app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
 
-// members page with EJS
+// // members page with EJS  ORIGINAL WITH BACKGROUND IMAGES
+// app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
+
+// app.get("/members", (req, res) => {
+//   if (!req.session.username) {
+//     res.redirect("/login");
+//     return;
+//   }
+
+//   const imgDir = path.join(__dirname, "public/img");
+//   fs.readdir(imgDir, (err, files) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).send("Server error");
+//       return;
+//     }
+
+//     const randomIndex = Math.floor(Math.random() * files.length);
+//     const randomFile = files[randomIndex];
+
+//     res.render("members", {
+//       username: req.session.username,
+//       backgroundImage: `/img/${randomFile}`,
+//       // userID: req.session._id,
+//     });
+//   });
+// });
+
+// members page with EJS NEW VERSION WITH 3 IMAGES
+app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
 app.get("/members", (req, res) => {
   if (!req.session.username) {
     res.redirect("/login");
@@ -311,15 +348,53 @@ app.get("/members", (req, res) => {
       return;
     }
 
-    const randomIndex = Math.floor(Math.random() * files.length);
-    const randomFile = files[randomIndex];
+    // Retrieve three random files from the directory
+    const randomFiles = getRandomFiles(files, 3);
 
     res.render("members", {
       username: req.session.username,
-      backgroundImage: `/img/${randomFile}`,
+      images: randomFiles.map((file) => `/img/${file}`),
     });
   });
 });
+
+// Helper function to retrieve random files from an array
+function getRandomFiles(files, count) {
+  const shuffled = files.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+
+
+// // async func to put image into /public/memberImages folder
+// async function uploadImage(image, userID) {
+//   await userCollection.updateOne({ _id: userID }, { $push: { images: image } });
+//   console.log("Image added to user");
+// }
+
+// // membersUpload page with EJS
+// app.get("/membersUpload", (req, res) => {
+//   if (!req.session.username) {
+//     res.redirect("/login");
+//     return;
+//   }
+//   res.render("membersUpload", {
+//     username: req.session.username,
+//     userID: req.session._id,
+//   });
+// });
+
+// // members upload page with EJS
+// app.post("/upload", async (req, res) => {
+//   if (!req.session.username) {
+//     res.redirect("/login");
+//     return;
+//   }
+//   var userID = req.session._id;
+//   var image = req.body.image;
+//   await uploadImage(image, userID);
+//   res.redirect("/members");
+// });
 
 // promoteUser route working
 app.post("/promoteUser", async (req, res) => {
@@ -353,16 +428,11 @@ app.get("/cat/:id", (req, res) => {
   }
 });
 
-// res.render("protectedRoute.ejs", {
-//   x: req.session.username,
-//   y: imageName,
-// });
 
 app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
-  res.status(404);
-  res.send("MY 404 Page not found - 404");
+  res.render("404");
 });
 
 // // change user ABC to admin

@@ -1,34 +1,31 @@
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>Members Page</title>
-      <style>
-        body {
-          background-image: url("<%= backgroundImage %>");
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-color: black;
-        }
-        h1, h5 {
-          color: white;
-        }
-        a {
-          color: white;
-        }
-        li {
-          color: white;
-        }
-      </style>
-    </head>
-    <body>
-       <%- include('partials/header.ejs'); %>
-       <%- include('partials/navbar.ejs'); %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Members</title>
+  <style>
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-gap: 10px;
+    }
 
-      <h5>Welcome, <%= username %>!</h5>
+    .image-grid img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+      <%- include('partials/header.ejs'); %> <%- include('partials/navbar.ejs');
+    %>
+  <h1>Welcome, <%= username %>!</h1>
 
-      <br />
-      <a href="/logout">Logout</a>
-           <%- include('partials/footer.ejs'); %>
+  <div class="image-grid">
+    <% for (let i = 0; i < images.length; i++) { %>
+      <img src="<%= images[i] %>">
+    <% } %>
+  </div>
+      <%- include('partials/footer.ejs'); %>
 
-    </body>
-  </html>
+</body>
+</html>
