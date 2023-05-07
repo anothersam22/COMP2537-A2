@@ -304,16 +304,17 @@ app.get("/admin", async (req, res) => {
   }
   // if logged in but not admin, redirect to 403 page
   var username = req.session.username;
-  
   const user = await userCollection.findOne({ username: username });
-  const currentPage = "403";
   if (!user.isAdmin) {
-    res.render("403", {currentPage});
-    return;
+    //res.render("403",);
+    res.redirect("/403");
+    return
   }
+
   // if logged in and admin, display all users
+  const currentPage = "admin";
   const users = await userCollection.find().toArray();
-  res.render("admin", { users }); // render the admin EJS page and pass in the users variable
+  res.render("admin", { users, currentPage }); // render the admin EJS page and pass in the users variable
 });
 
 // members page with EJS NEW VERSION WITH 3 IMAGES
@@ -415,10 +416,17 @@ app.get("/cat/:id", (req, res) => {
 
 app.use(express.static(__dirname + "/public"));
 
+app.get("/403", (req, res) => {
+  const currentPage = "403";
+  res.render("403", { currentPage });
+});
+
+
 app.get("*", (req, res) => {
   const currentPage = "*";
   res.render("404", {currentPage});
 });
+
 
 // // change user ABC to admin
 // promoteUser("abc");
