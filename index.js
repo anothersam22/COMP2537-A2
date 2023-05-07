@@ -101,7 +101,8 @@ async function deleteAllUsers() {
 
 // EJS for home page
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  const currentPage = "home";
+  res.render("index.ejs", { currentPage });
 });
 
 // EJS version of nosql-injection
@@ -130,19 +131,21 @@ app.get("/nosql-injection", async (req, res) => {
 // EJS version of about
 app.get("/about", (req, res) => {
   const color = req.query.color || "black";
-  res.render("about", { color });
+  const currentPage = "about";
+  res.render("about", { color, currentPage });
 });
 
 // EJS Contact route
 app.get("/contact", (req, res) => {
   const missingEmail = req.query.missing;
-
-  res.render("contact", { missingEmail });
+  const currentPage = "contact";
+  res.render("contact", { missingEmail, currentPage });
 });
 
 // EJS version of submitEmail
 app.post("/submitEmail", (req, res) => {
   var email = req.body.email;
+
   if (!email) {
     res.redirect("/contact?missing=1");
   } else {
@@ -152,6 +155,7 @@ app.post("/submitEmail", (req, res) => {
 
 // EJS version of createUser
 app.get("/createUser", (req, res) => {
+  const currentPage = "createUser";
   res.render("createUser", {
     pageTitle: "Sign Up",
     pageCSS:
@@ -166,12 +170,14 @@ app.get("/createUser", (req, res) => {
     inputPlaceholder2: "password",
     inputPlaceholder3: "email",
     buttonText: "Submit",
+    currentPage,
   });
 });
 
 // EJS version of login
 app.get("/login", (req, res) => {
-  res.render("login.ejs");
+  const currentPage = "login";
+  res.render("login.ejs", {currentPage});
 });
 
 // EJS version of submitUser
@@ -208,11 +214,13 @@ app.post("/submitUser", async (req, res) => {
 });
 
 app.get("/createUser", (req, res) => {
-  res.render("createUser");
+  const currentPage = "createUser";
+  res.render("createUser", {currentPage});
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  const currentPage = "login";
+  res.render("login", {currentPage});
 });
 
 // // original version of loggingin
@@ -309,6 +317,7 @@ app.get("/admin", async (req, res) => {
 // members page with EJS NEW VERSION WITH 3 IMAGES
 app.use(express.static("public")); // <--- this uses the 'RELATIVE' path; THAT'S WHY IT WORKS
 app.get("/members", (req, res) => {
+  const currentPage = "members";
   if (!req.session.username) {
     res.redirect("/login");
     return;
@@ -328,6 +337,7 @@ app.get("/members", (req, res) => {
     res.render("members", {
       username: req.session.username,
       images: randomFiles.map((file) => `/img/${file}`),
+      currentPage,
     });
   });
 });
@@ -384,8 +394,9 @@ app.post("/demoteUser", async (req, res) => {
 
 // EJS version of logout
 app.get("/logout", (req, res) => {
+  const currentPage = "logout";
   req.session.destroy();
-  res.render("logout");
+  res.render("logout", {currentPage});
 });
 
 app.get("/cat/:id", (req, res) => {
